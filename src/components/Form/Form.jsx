@@ -1,9 +1,21 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContacts } from 'redux/contactsSlice';
 import PropTypes from 'prop-types';
 
-const Form = ({ createContact }) => {
+const Form = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts);
+
+  const createContact = ({ name, number }) => {
+    if (contacts.find(contact => contact.name === name)) {
+      alert(`Oops! ${name} is already in contacts.`);
+    } else {
+      dispatch(addContacts({ name, number }));
+    }
+  };
 
   const handleChange = ({ target: { name, value } }) => {
     switch (name) {
